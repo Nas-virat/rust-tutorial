@@ -5,9 +5,16 @@
 #![allow(while_true)]
 #![allow(unused_labels)]
 #![allow(unreachable_code)]
+#![allow(unused_imports)]
 
 use std::collections::HashMap;
-
+// use rust_basic::person::Person;
+// use rust_basic::customers::Customer;
+use rust_basic::{
+    person::Person,
+    customers::Customer,
+    speaking::Speaking,
+};
 fn main() {
 
     //Variables
@@ -140,14 +147,63 @@ fn main() {
     println!("{}",y.unwrap());
 
     //struct
-    let p = Person{
-        name: String::from("John"),
-        age: 20,
+    let p = Person::new("John".to_string(),20);
+    // x = p.name; // error because it private
+
+    p.hello();
+
+
+    //Trait
+    p.speak();
+
+    //Enum
+    let color = Colors::Red;
+    let x = Colors::Green;
+
+    let selected_color = "";
+
+    match color{
+        Colors::Red => selected_color = "Red",
+        Colors::Green => println!("Green"),
+        Colors::Blue => println!("Blue"),
+        _ => println!("Unknown"), // default
+    }
+
+    let color = match x{
+        Colors::Red => "Red",
+        Colors::Green => "Green",
+        Colors::Blue => "Blue",
+        _ => "Unknown",
     };
-    
+
+    let score = check_grade(-1);
+    match score{
+        GradeResult::Value(grade) => println!("{}",grade),
+        GradeResult::Error(msg) => println!("{}",msg),
+    }
 
 }
 
+fn check_grade(score: i32) -> GradeResult{
+    
+    if score < 0 || score > 100{
+        return GradeResult::Error("score is not correct".to_string());
+    }
+
+    return GradeResult::Value("A".to_string());
+}
+
+enum GradeResult{
+    Value(String),
+    Error(String),
+}
+
+enum Colors{
+    Red,
+    Green,
+    Blue,
+    White,
+}
 
 fn get_number() -> i32{
     let a = 10;
@@ -156,9 +212,6 @@ fn get_number() -> i32{
     a + b // no need return with no ;
 }
 
-//Struct
 
-struct Person{
-    name: String,
-    age: i32,
-}
+
+
