@@ -182,6 +182,49 @@ fn main() {
         GradeResult::Error(msg) => println!("{}",msg),
     }
 
+    let x = check_grade2(-1);
+
+    match x{
+        Some(grade) => println!("{}",grade),
+        None => println!("Error"),
+    }
+
+    let x = check_grade3(-1);
+    match x{
+        Ok(grade) => println!("{}",grade),
+        Err(msg) => println!("{}",msg),
+    }
+
+    let x = check_grade3(100);
+    if x.is_err(){ // check if result is error
+        return;
+    }
+    let y = x.unwrap(); // If the result is Ok, return the value, otherwise panic
+
+    let x = check_grade3(100);
+    let y = match x{
+        Ok(grade) => grade,
+        Err(msg) => panic!("{}",msg),
+    };
+
+    // Closures (similar to lambda in python)
+    let x = add(10,20);
+    let x = |x,y| x + y;
+    let y = x(10,20);
+    let y = cal(10,20,add);
+}
+
+fn cal<F: Fn(i32,i32) -> i32>(a: i32, b: i32, f:F) -> i32{
+    return f(a,b);
+}
+
+fn cal2<F>(a: i32, b: i32, f:F) -> i32
+where F: Fn(i32,i32) -> i32{
+    return f(a,b);
+}
+
+fn add(x: i32, y: i32) -> i32{
+    return x + y;
 }
 
 fn check_grade(score: i32) -> GradeResult{
@@ -191,6 +234,24 @@ fn check_grade(score: i32) -> GradeResult{
     }
 
     return GradeResult::Value("A".to_string());
+}
+
+fn check_grade2(score: i32) -> Option<String>{
+    
+    if score < 0 || score > 100{
+        return None;
+    }
+
+    return Some("A".to_string());
+}
+
+fn check_grade3(score: i32) -> Result<String,String>{
+    
+    if score < 0 || score > 100{
+        return Err("score is not correct".to_string());
+    }
+
+    return Ok("A".to_string());
 }
 
 enum GradeResult{
